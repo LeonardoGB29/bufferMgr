@@ -1,0 +1,14 @@
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.obj
+*.pdb
+*.ilk
+*.tlog/
+*.idb
+*.exe
+*.ilk
+*.log
+*.lastbuildstate
+*.recipe
+x64/
