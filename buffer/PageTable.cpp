@@ -5,7 +5,7 @@ int PageTable::getFrame(int pageID) {
     auto it = pageMap.find(pageID);
     if (it != pageMap.end()) {
         return it->second;
-    }
+    } // lineups
     return -1;  // Retorna -1 si la página no está presente
 }
 

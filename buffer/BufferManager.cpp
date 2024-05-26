@@ -2,17 +2,73 @@
 #include <iostream>
 #include <cassert>
 
+#include "BufferManager.h"
+
+BufferManager::BufferManager(int size) : bufferPool(size), replacer() {}
+
+void BufferManager::setPage(int pageID) {
+    int frameID = pageTable.getFrame(pageID);
+    if (frameID == -1) {  // La página no está en memoria
+        frameID = replacer.findFrame();  // Buscar un frame libre o para reemplazar
+        if (frameID == -1) {
+            throw std::runtime_error("No frames available.");
+        }
+        bufferPool.setPage(pageID, frameID);  // Sube la página a la memoria
+        pageTable.setFrame(pageID, frameID);  // Vincula en la tabla de páginas
+        bufferPool.getFrame(frameID).pin();  // Inicialmente pin the page
+    }
+    else {
+        throw std::logic_error("Page already in memory.");
+    }
+}
+
+Frame& BufferManager::requestPage(int pageID) {
+    int frameID = pageTable.getFrame(pageID);
+    if (frameID != -1) {
+        Frame& frame = bufferPool.getFrame(frameID);
+        frame.pin();
+        return frame;
+    }
+    else {
+        throw std::runtime_error("Page not found in memory.");
+    }
+}
+
+void BufferManager::releasePage(int pageID) {
+    int frameID = pageTable.getFrame(pageID);
+    if (frameID != -1) {
+        Frame& frame = bufferPool.getFrame(frameID);
+        frame.unpin();
+    }
+}
+
+bool BufferManager::checkPage(int pageID) {
+    return pageTable.getFrame(pageID) != -1;
+}
+
+void BufferManager::printPageTable() {
+    std::cout << "Frame ID - Page ID - Dirty Bit - Pin Count - Last Used\n";
+    for (const auto& entry : pageTable.pageMap) {
+        Frame& frame = bufferPool.getFrame(entry.second);
+        std::cout << entry.second << " " << entry.first << " " << frame.dirtyFlag << " "
+            << frame.pinCounter << " " << frame.lastUsed << "\n";
+    }
+}
+
+/*
 BufferManager::BufferManager(int size) : bufferPool(size), pageTable(), LRU() {
     // Inicializa el buffer pool con un tamaño determinado.
 }
 
 Frame& BufferManager::requestPage(int pageID) {
     int frameID = pageTable.getFrame(pageID);
+
     if (frameID != -1) {  // La página ya está en el buffer
         Frame& frame = bufferPool.getFrame(frameID);
-        frame.pin();  // Incrementa el pinCount ya que la página está siendo accedida
+        frame.pin();
         return frame;
     }
+
     else {  // La página no está en el buffer
         frameID = bufferPool.getLeastRecentlyUsed();  // Encuentra un frame LRU disponible
         if (frameID == -1) {
@@ -101,4 +157,4 @@ void BufferManager::printPageTable() {
         std::cout << entry.second << " " << entry.first << " " << frame.dirtyFlag << " "
             << frame.pinCount << " " << frame.lastUsed << "\n";
     }
-}
+}*/

@@ -1,6 +1,6 @@
 #include "BufferPool.h"
 
-BufferPool::BufferPool(int size) : frames(size), lastUsedCounter(0) {
+BufferPool::BufferPool(int size) : frames(size) {
     // Inicializa el buffer pool con un tamaño fijo y el contador de último uso a 0.
 }
 
@@ -27,27 +27,33 @@ int BufferPool::size() {
 
 int BufferPool::getLeastRecentlyUsed() {
     int lruIndex = -1;
-    int minLastUsed = -1;  // Usamos -1 para identificar que aún no hemos encontrado un frame válido.
+    int minLastUsed = -1;  // usamos -1 para identificar que aún no hemos encontrado un frame válido.
 
     for (int i = 0; i < frames.size(); ++i) {
-        if (frames[i].pinCount == 0) {  // Consideramos solo frames que no estén 'pinned'.
-            if (minLastUsed == -1 || frames[i].lastUsed < minLastUsed) {  // Actualizamos el mínimo si es el primero encontrado o si encontramos uno más antiguo.
+        if (frames[i].pinCount == 0) {  // consideramos solo frames que no estén 'pinned'.
+            if (minLastUsed == -1 || frames[i].lastUsed < minLastUsed) {  // actualizamos el mínimo si es el primero encontrado o si encontramos uno más antiguo.
                 minLastUsed = frames[i].lastUsed;
                 lruIndex = i;
             }
         }
+        // else cout no hay espacio disponible en este momento, break
     }
 
-    return lruIndex;  // Devuelve el índice del frame menos recientemente usado que puede ser reemplazado.
+    return lruIndex;  // devuelve el índice del frame menos recientemente usado que puede ser reemplazado.
 }
 
 void BufferPool::updateLastUsed(int frameID) {
-    if (frameID < frames.size()) {
-        frames[frameID].lastUsed = ++lastUsedCounter;
+    if (frameID < frames.size()) { // comprobacion en el rango
+        frames[frameID].lastUsed++;
     }
 }
 
-int BufferPool::getLastUsedCounter() {
-    // Devuelve el contador de último uso.
-    return lastUsedCounter;
+int BufferPool::getLastUsedCounter() { // falta comprobar que sea 0 isPinned tmbn
+    int minLastUsed = frames[0].lastUsed;
+    for (int i = 1; i < frames.size(); ++i) { 
+        if (frames[i].lastUsed < minLastUsed) {
+            minLastUsed = frames[i].lastUsed; 
+        }
+    }
+    return minLastUsed; 
 }

@@ -5,7 +5,7 @@
 class BufferPool {
 private:
     std::vector<Frame> frames;
-    int lastUsedCounter;  // Contador para el seguimiento de último uso de los frames
+    //int lastUsedCounter;  // Contador para el seguimiento de último uso de los frames
 
 public:
     BufferPool(int size);

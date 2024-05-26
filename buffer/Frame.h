@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include <string>
 
 class Frame {
 public:
@@ -7,6 +9,7 @@ public:
     bool dirtyFlag;
     int pinCount;
     int lastUsed;
+    std::vector<std::vector<std::string>> content;
 
     Frame();
     void pin();

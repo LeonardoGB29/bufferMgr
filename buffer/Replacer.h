@@ -3,7 +3,7 @@
 
 class Replacer {
 private:
-    std::list<int> queue;
+    std::list<int> lruQueue;
 
 public:
     void removePage(int pageID);
