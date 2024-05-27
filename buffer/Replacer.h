@@ -3,12 +3,13 @@
 
 class Replacer {
 private:
-    std::list<int> queue;
+    std::list<int> cola;
 
 public:
-    void removePage(int pageID);
-    int findFrame();
-    void updateLRU(int frameID);
-    void addToQueue(int frameID);
-    void removeFromQueue(int frameID);
+    void eliminarPag(int pageID);
+    int BuscarFrame();
+    void Algortimo(int frameID);
+    void addCola(int frameID);
+    void quitarDeCola(int frameID);
+    const std::list<int>& getCola() const { return cola;}
 };

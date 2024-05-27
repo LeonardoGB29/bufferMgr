@@ -6,10 +6,14 @@ int PageTable::getFrame(int pageID) {
     if (it != pageMap.end()) {
         return it->second;
     }
-    return -1;  // Retorna -1 si la página no está presente
+    return -1;  //una forma de decir que no se ha encontrado un frame
 }
 
 void PageTable::setFrame(int pageID, int frameID) {
-    // Asocia un Page ID con un Frame ID en la tabla de páginas.
+    // Asocia un Page ID con un Frame ID en la tabla de pï¿½ginas.
     pageMap[pageID] = frameID;  // Establece o actualiza el mapeo
+}
+
+void PageTable::removePage(int pageID) {
+    pageMap.erase(pageID);
 }

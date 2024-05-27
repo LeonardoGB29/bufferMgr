@@ -1,21 +1,27 @@
 #include "Replacer.h"
+ 
+ void Replacer::eliminarPag(int IDpagina){
+    cola.remove(IDpagina);
+ }
 
-int Replacer::findFrame() {
-    // Encuentra un frame disponible para ser reutilizado.
-    if (!queue.empty()) {
-        int frameID = queue.front(); // ObtÈn el ID del frame desde el frente de la cola
-        queue.pop_front();          // Retira el frame de la cola
-        return frameID;             // Devuelve el ID del frame
+ int Replacer::BuscarFrame() {
+    if (!cola.empty()) {
+        return cola.back(); // Devuelve el √∫ltimo frame en la cola
     }
-    return -1;  // Retorna -1 si no hay frames disponibles
+    return -1; // Si la cola est√° vac√≠a, devuelve un valor no v√°lido
 }
 
-void Replacer::removeFromQueue(int frameID) {
-    // Elimina el frame de la cola
-    queue.remove(frameID);
-}
 
-void Replacer::addToQueue(int frameID) {
-    // AÒade un frame al final de la cola de reemplazo.
-    queue.push_back(frameID);  // AÒade el frame ID al final de la cola
-}
+ void Replacer::Algortimo(int IDframe){
+    cola.remove(IDframe);
+    cola.push_front(IDframe);
+ }
+
+ void Replacer::addCola(int IDframe){
+    cola.push_front(IDframe);
+ }
+
+ void Replacer::quitarDeCola(int IDframe){
+    cola.remove(IDframe);
+ }
+ 
