@@ -13,3 +13,7 @@ void PageTable::setFrame(int pageID, int frameID) {
     // Asocia un Page ID con un Frame ID en la tabla de páginas.
     pageMap[pageID] = frameID;  // Establece o actualiza el mapeo
 }
+
+void PageTable::removePage(int pageID) {
+    pageMap.erase(pageID);
+}

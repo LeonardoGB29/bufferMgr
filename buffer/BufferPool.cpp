@@ -27,23 +27,18 @@ int BufferPool::size() {
 
 int BufferPool::getLeastRecentlyUsed() {
     int lruIndex = -1;
-    int minLastUsed = -1;  // usamos -1 para identificar que aún no hemos encontrado un frame válido.
-
+    int minLastUsed = INT_MAX;  // Inicializa con el máximo valor posible
     for (int i = 0; i < frames.size(); ++i) {
-        if (frames[i].pinCount == 0) {  // consideramos solo frames que no estén 'pinned'.
-            if (minLastUsed == -1 || frames[i].lastUsed < minLastUsed) {  // actualizamos el mínimo si es el primero encontrado o si encontramos uno más antiguo.
-                minLastUsed = frames[i].lastUsed;
-                lruIndex = i;
-            }
+        if (frames[i].pinCount == 0 && frames[i].lastUsed < minLastUsed) {
+            minLastUsed = frames[i].lastUsed;
+            lruIndex = i;
         }
-        // else cout no hay espacio disponible en este momento, break
     }
-
-    return lruIndex;  // devuelve el índice del frame menos recientemente usado que puede ser reemplazado.
+    return lruIndex;  // Devuelve el índice del frame menos recientemente usado
 }
 
 void BufferPool::updateLastUsed(int frameID) {
-    if (frameID < frames.size()) { // comprobacion en el rango
+    if (frameID < frames.size() && !frames[frameID].isPinned) { // Solo actualiza si el frame no está pinned
         frames[frameID].lastUsed++;
     }
 }

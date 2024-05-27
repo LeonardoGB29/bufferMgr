@@ -8,18 +8,13 @@ class BufferManager {
 private:
     BufferPool bufferPool;
     PageTable pageTable;
-    Replacer LRU;
+    Replacer replacer;
 
 public:
     BufferManager(int size);
+    void setPage(int pageID);
     Frame& requestPage(int pageID);
     void releasePage(int pageID);
-    void pinPage(int pageID);
-    void unpinPage(int pageID);
-    void checkSpace();
-    void setPageInBufferPool(int pageID, int frameID);
-    Frame& getFrameFromBufferPool(int frameID);
-    int getBufferSize();
-    void logAccess(int frameID, std::string operation);
+    bool checkPage(int pageID);
     void printPageTable();
 };
