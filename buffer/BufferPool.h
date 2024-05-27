@@ -55,4 +55,5 @@ public:
     qué marco ha sido el menos recientemente utilizado. Sin embargo, parece que hay un error en esta función, ya que 
     debería verificar si los marcos están "pinneados" antes de considerar su "último uso".
     */
+    void increment(int);
 };

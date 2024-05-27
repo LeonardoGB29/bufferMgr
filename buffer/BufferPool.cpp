@@ -18,7 +18,7 @@ void BufferPool::setPage(int pageID, int frameID) {
 }
 
 Frame& BufferPool::getFrame(int frameID) {
-    updateLastUsed(frameID);  // Actualiza cada vez que se accede a un frame
+    //updateLastUsed(frameID);  // Actualiza cada vez que se accede a un frame
     return frames[frameID];
 }
 
@@ -43,11 +43,11 @@ int BufferPool::getLeastRecentlyUsed() {
 }
 
 void BufferPool::updateLastUsed(int frameID) {
-    if (frameID < frames.size() && !frames[frameID].isPinned) { // Solo actualiza si el frame no est� pinned
+    if (frameID < frames.size() /*&& !frames[frameID].isPinned*/) { // Solo actualiza si el frame no est� pinned
         frames[frameID].lastUsed++;
     }
 }
-
+    
 int BufferPool::getLastUsedCounter() { // falta comprobar que sea 0 isPinned tmbn
     int minLastUsed = frames[0].lastUsed;
     for (int i = 1; i < frames.size(); ++i) { 
@@ -56,4 +56,12 @@ int BufferPool::getLastUsedCounter() { // falta comprobar que sea 0 isPinned tmb
         }
     }
     return minLastUsed; 
+}
+
+void BufferPool::increment(int frameID)
+{
+    for(int i = 0; i < frames.size(); i++){
+        if(i != frameID && frames[i].pinCount)
+            frames[i].lastUsed++;
+    }
 }

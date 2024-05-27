@@ -2,41 +2,40 @@
 #include <string>
 #include <limits>
 #include "BufferManager.h"
-
 void bufferOperation(const std::string& operation, int pageID, BufferManager& manager) {
     try {
         Frame& frame = manager.requestPage(pageID);
         if (operation == "W") {
             frame.setDirty(true);
-            std::cout << "Pagina " << pageID << " escrita y marcada como sucia.\n";
+            std::cout << "Página " << pageID << " escrita y marcada como sucia.\n";
         }
         else if (operation == "L") {
-            std::cout << "Pagina " << pageID << " leida.\n";
+            std::cout << "Página " << pageID << " leída.\n";
         }
-        manager.releasePage(pageID);  // Despinnea la pagina independientemente de la operacion para liberar el recurso
+        manager.releasePage(pageID);  // Despinnea la página independientemente de la operación para liberar el recurso
     }
     catch (const std::exception& e) {
-        std::cout << "Error al procesar la pagina: " << e.what() << "\n";
+        std::cout << "Error al procesar la página: " << e.what() << "\n";
     }
 }
 
 void loadPageToMemory(int pageID, BufferManager& manager) {
     if (!manager.checkPage(pageID)) {
         manager.setPage(pageID);
-        std::cout << "Pagina " << pageID << " cargada satisfactoriamente en la memoria.\n";
+        std::cout << "Página " << pageID << " cargada satisfactoriamente en la memoria.\n";
     }
     else {
-        std::cout << "Pagina " << pageID << " ya esta en memoria.\n";
+        std::cout << "Página " << pageID << " ya está en memoria.\n";
     }
 }
 
 void releasePageFromMemory(int pageID, BufferManager& manager) {
     if (manager.checkPage(pageID)) {
         manager.releasePage(pageID);
-        std::cout << "Pagina " << pageID << " liberada de la memoria.\n";
+        std::cout << "Página " << pageID << " liberada de la memoria.\n";
     }
     else {
-        std::cout << "Pagina " << pageID << " no esta en memoria o ya fue liberada.\n";
+        std::cout << "Página " << pageID << " no está en memoria o ya fue liberada.\n";
     }
 }
 
@@ -64,7 +63,7 @@ void displayMenu(BufferManager& manager) {
                 bufferOperation(operation, pageID, manager);
             }
             else {
-                std::cout << "Operacion invalida. Intente de nuevo.\n";
+                std::cout << "Operacion inválida. Intente de nuevo.\n";
             }
             break;
         case 2:
@@ -84,7 +83,7 @@ void displayMenu(BufferManager& manager) {
             std::cout << "Saliendo del programa...\n";
             return;
         default:
-            std::cout << "Opcion no valida. Intente de nuevo.\n";
+            std::cout << "Opcion no válida. Intente de nuevo.\n";
         }
     }
 }

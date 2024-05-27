@@ -40,8 +40,9 @@ Frame& BufferManager::requestPage(int pageID) {
     }
     Frame& frame = bufferPool.getFrame(frameID);
     frame.pin();  // Marca el frame como "pin" e incrementa el pinCount.
-    bufferPool.updateLastUsed(frameID);  // Actualiza el contador de último uso al acceder a la página.
+    //bufferPool.updateLastUsed(frameID);  // Actualiza el contador de último uso al acceder a la página.
     bufferPool.updateCount(frameID);
+    bufferPool.increment(frameID);
     return frame;
 }
 
