@@ -4,7 +4,7 @@
 #include "BufferManager.h"
 
 BufferManager::BufferManager(int size) : bufferPool(size), replacer(), pageTable() {
-    // A�ade todos los frames al Replacer inicialmente
+    // A�ade todos los frames al Replacer inicialmente
     for (int i = 0; i < size; i++) {
         replacer.addToQueue(i);
     }
@@ -22,7 +22,7 @@ void BufferManager::setPage(int pageID) {
         return;
     }
     if (bufferPool.getFrame(frameID).dirtyFlag) {
-        // Aseg�rate de manejar la escritura en disco antes de sobreescribir
+        // Aseg�rate de manejar la escritura en disco antes de sobreescribir
         std::cout << "Writing old page " << bufferPool.getFrame(frameID).pageID << " to disk.\n";
     }
     bufferPool.getFrame(frameID).reset();
@@ -33,14 +33,15 @@ void BufferManager::setPage(int pageID) {
 }
 
 Frame& BufferManager::requestPage(int pageID) {
-    int frameID = pageTable.getFrame(pageID); // devuelve -1 si no lo encuentra
-    //std::cout << "frameID " << frameID << ".\n";
+    int frameID = pageTable.getFrame(pageID);
     if (frameID == -1) {
-        setPage(pageID); // si no esta en memoria, lo carga
+        setPage(pageID);  // Si no está en memoria, la carga.
         frameID = pageTable.getFrame(pageID);
     }
     Frame& frame = bufferPool.getFrame(frameID);
-    frame.pin();
+    frame.pin();  // Marca el frame como "pin" e incrementa el pinCount.
+    bufferPool.updateLastUsed(frameID);  // Actualiza el contador de último uso al acceder a la página.
+    bufferPool.updateCount(frameID);
     return frame;
 }
 
@@ -50,8 +51,14 @@ void BufferManager::releasePage(int pageID) {
         Frame& frame = bufferPool.getFrame(frameID);
         frame.unpin();
         if (frame.pinCount == 0) {
-            replacer.addToQueue(frameID); // Si no est� "pinned", se a�ade para posible reemplazo.
+            replacer.addToQueue(frameID); // Añade de nuevo al replacer si no está en uso.
+            pageTable.removePage(pageID); // Elimina la página del PageTable.
+            frame.reset(); // Resetear el frame para eliminar cualquier dato residual.
+            std::cout << "Página " << pageID << " completamente liberada de la memoria.\n";
         }
+    }
+    else {
+        std::cout << "Página " << pageID << " no encontrada en memoria.\n";
     }
 }
 

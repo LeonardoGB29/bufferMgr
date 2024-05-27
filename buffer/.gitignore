@@ -12,3 +12,5 @@
 *.lastbuildstate
 *.recipe
 x64/
+Build/
+CMakeLists.txt
