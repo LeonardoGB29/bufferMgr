@@ -1,4 +1,5 @@
 #include "Replacer.h"
+#include <iostream>
 
 int Replacer::findFrame() {
     if (!lruQueue.empty()) {
@@ -16,9 +17,14 @@ void Replacer::updateLRU(int frameID) {
 }
 
 void Replacer::addToQueue(int frameID) {
-    lruQueue.push_back(frameID);  // Añade el frame ID al final de la lista
+    lruQueue.push_back(frameID);  // Añade el frame ID al final de la cola
+    std::cout << "Frame " << frameID << " added to LRU queue.\n";  // Diagnóstico
 }
 
 void Replacer::removeFromQueue(int frameID) {
-    lruQueue.remove(frameID);  // Elimina todas las instancias del frame ID de la lista
+    auto it = std::find(lruQueue.begin(), lruQueue.end(), frameID);
+    if (it != lruQueue.end()) {
+        lruQueue.erase(it);
+        std::cout << "Frame " << frameID << " removed from LRU queue.\n";  // Diagnóstico
+    }
 }

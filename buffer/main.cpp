@@ -20,7 +20,7 @@ void bufferOperation(const std::string& operation, int pageID, BufferManager& ma
     manager.releasePage(pageID);  // despinne la página independientemente de la operación para liberar el recurso
 }
 
-void loadPageToMemory(int pageID, BufferManager& manager) {
+void loadPageToMemory(int pageID, BufferManager& manager) { //nuestra funcion reciba si nuestra page ya esta en memoria
     if (!manager.checkPage(pageID)) {
         manager.setPage(pageID);
         std::cout << "Página " << pageID << " cargada satisfactoriamente en la memoria.\n";
@@ -36,8 +36,8 @@ void displayMenu(BufferManager& manager) {
 
     while (true) {
         std::cout << "\n########  GESTION DE MEMORIA  ########\n";
-        std::cout << "1. Solicitar pagina (Lectura/Escritura)\n";
-        std::cout << "2. Cargar pagina del disco a la memoria\n";
+        std::cout << "1. Solicitar pagina (Lectura/Escritura)\n"; 
+        std::cout << "2. Cargar pagina del disco a la memoria\n"; 
         std::cout << "3. Imprimir tabla de páginas\n";
         std::cout << "4. Salir\n";
         std::cout << "Seleccione una opción: ";
@@ -74,7 +74,7 @@ void displayMenu(BufferManager& manager) {
 }
 
 int main() {
-    BufferManager bufferManager(5);  // Suponiendo un tamaño del buffer de 5 frames
+    BufferManager bufferManager(5);  // num de paginas definidas
     displayMenu(bufferManager);
     return 0;
 }

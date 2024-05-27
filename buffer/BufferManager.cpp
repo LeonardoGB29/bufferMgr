@@ -3,7 +3,12 @@
 #include <cassert>
 #include "BufferManager.h"
 
-BufferManager::BufferManager(int size) : bufferPool(size), replacer(), pageTable() {}
+BufferManager::BufferManager(int size) : bufferPool(size), replacer(), pageTable() {
+    // Añade todos los frames al Replacer inicialmente
+    for (int i = 0; i < size; i++) {
+        replacer.addToQueue(i);
+    }
+}
 
 void BufferManager::setPage(int pageID) {
     int frameID = pageTable.getFrame(pageID);
@@ -55,11 +60,11 @@ bool BufferManager::checkPage(int pageID) {
 }
 
 void BufferManager::printPageTable() {
-    std::cout << "Frame ID - Page ID - Dirty Bit - Pin Count - Last Used\n";
+    std::cout << "# Frame ID\t- Page ID\t- Dirty Bit\t- Pin Count\t- Last Used\n";
     for (auto& entry : pageTable.pageMap) {
         Frame& frame = bufferPool.getFrame(entry.second);
-        std::cout << entry.second << " - " << entry.first << " - "
-            << (frame.dirtyFlag ? "Dirty" : "Clean") << " - "
-            << frame.pinCount << " - " << frame.lastUsed << "\n";
+        std::cout <<"# "<< entry.second << "\t\t- " << entry.first << "\t\t- "
+            << (frame.dirtyFlag ? "1" : "0") << "\t\t- "
+            << frame.pinCount << "\t\t- " << frame.lastUsed << "\t\t\n";
     }
 }
